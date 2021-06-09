@@ -15,7 +15,7 @@ cd t800_avd
 
 Run an instance of Android 11 SDK 30 in an x86 arch
 ```bash
-ARCH=x86 API_V=30 BUILD_V=30.0.2 docker-compose up -d
+ARCH=x86 API_V=30 BUILD_V=30.0.2 docker-compose up
 ```
 
 Run the manager
@@ -23,7 +23,7 @@ Run the manager
 cd t800_manager
 python3 -m venv .env
 source .env/bin/activate
-pip install --upgrade
+pip install pip --upgrade
 pip install -r requirements.txt
 cd api
 python3 api.py
