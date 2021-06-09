@@ -1,0 +1,12 @@
+<div id='devices'>
+    <br><br>
+{% for device in devices%}
+    <div id=device onclick="debug_device(this)" device_id={{device["id"]}}>
+        <div class=device_id>{{device["id"]}}</div>
+        <div class=device_ip>{{device["ip"]}}</div>
+        <div class=device_name>{{device["name"]}}</div>
+        <div class='device_{{device["status"]}}' >{{device["status"]}}</div>
+        <div class=device_tools></div>
+    </div>
+{% endfor %}
+</div>

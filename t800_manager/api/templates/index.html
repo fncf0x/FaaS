@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>T800</title>
+        <link rel="T800 icon" type="image/jpg" href="/static/images/favicon.png"/>
+        <link rel="stylesheet" type="text/css" href="/static/css/main.css">
+        <script src="/static/js/main.js"></script>
+    </head>
+    <body>
+        <div id="cboxOverlay" style="opacity: 0.8; cursor: default; visibility: visible;"></div>
+        {% include "components/main-bar.html" %}
+        <div id=container>
+            {{content}}
+        </div>
+    </body>
+</html>

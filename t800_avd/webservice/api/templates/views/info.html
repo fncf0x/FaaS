@@ -1,0 +1,17 @@
+<div class=appsTitle><font color=green>#</font> Informations</div>
+<div id=infos>
+    {% for info in infos %}
+    <font color=red>OS: </font>Android {{infos[0]["os"]}}<br>
+    <font color=red>API version: </font>{{infos[0]["api"]}}<br>
+    <font color=red>Architecture: </font>{{infos[0]["arch"]}}<br>
+    <font color=red>Uname: </font>{{infos[0]["uname"]}}<br>
+    <font color=red>Storage: </font>
+    <font color=white>size: </font>{{infos[0]["storage"][0]}}
+    <font color=white>used: </font>{{infos[0]["storage"][1]}}
+    <font color=white>available: </font>{{infos[0]["storage"][2]}}<br>
+    <font color=red>CPU Info:</font>
+    <pre>
+{{infos[0]["cpuinfo"]}}<br>
+    </pre>
+    {% endfor %}
+</div>

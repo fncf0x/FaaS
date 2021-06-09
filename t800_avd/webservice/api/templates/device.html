@@ -1,0 +1,16 @@
+<div id=deviceHeader device_id='{{device_id}}'>
+    <div class="deviceinfo">
+        <font color=white>ID: </font><font color=green>{{device_id}}</font><br>
+        <font color=white>Uptime: </font><font color=green>{{uptime}} min</font><br>
+    </div>
+
+</div>
+<div id=board>
+    {{display}}
+</div>
+<div id=menu>
+    <div id=currentScreen>
+        <img src='data:image/png;base64,{{img_b64}}' height=100%>
+    </div>
+    {% include "components/side-bar.html" %}
+</div>
