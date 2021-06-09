@@ -13,10 +13,12 @@ def get_devices():
         if 'Exited' in device:
             status = 'stopped'
         device_info = device.split('|')
-        print(device_info)
+        ip = device_info[-2].split('->')[0]
+        if status == 'stopped':
+            ip = 'Not listening'
         devices.append({
             'id': device_info[0],
-            'ip': device_info[-2].split('->')[0],
+            'ip': ip,
             'name': device_info[-1],
             'status': status
         })
