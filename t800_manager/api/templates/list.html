@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>{{ list_name }} List</title>
+    <link rel="stylesheet" type="text/css" href="/static/css/vendor/bootstrap/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="/static/css/vendor/perfect-scrollbar/perfect-scrollbar.css">
+    <link rel="stylesheet" type="text/css" href="/static/css/list.css">
+</head>
+<body>
+<div class="limiter">
+    <div class="container-table100">
+        <div class="wrap-table100">
+            <div class="table100 ver1 m-b-110">
+                <div class="table100-head">
+                    <table>
+                        <thead>
+                        <tr class="row100 head">
+                            {% for i in range(1,len_col) %}
+                                <th class="cell100 column{{ i }}">{{ columns[i-1] }}</th>
+                            {% endfor %}
+                        </tr>
+                        </thead>
+                    </table>
+                </div>
+
+                <div class="table100-body js-pscroll">
+                    <table>
+                        <tbody>
+                        {% for file in files %}
+                            <tr class="row100 body">
+                                {% for i in range(1,len_col) %}
+                                    <td class="cell100 column{{ i }}">{{ file[i-1] }}</td>
+                                {% endfor %}
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!--===============================================================================================-->
+<script src="/static/js/vendor/jquery/jquery-3.2.1.min.js"></script>
+<!--===============================================================================================-->
+<script src="/static/js/vendor/perfect-scrollbar/perfect-scrollbar.min.js"></script>
+<script>
+    $('.js-pscroll').each(function () {
+        var ps = new PerfectScrollbar(this);
+
+        $(window).on('resize', function () {
+            ps.update();
+        })
+    });
+</script>
+</body>
+</html>
