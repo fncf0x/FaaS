@@ -1,9 +1,11 @@
 from flask import Flask, render_template, request, make_response, Markup
 import subprocess as sp
+import logging
 from android_utils import get_b64_screen, android_shell_cmd, get_apps, get_hooks, get_info, get_device_info
 from utils import check_page_name, safe_cmd
 
 
+logging.basicConfig(filename='/flask.log',level=logging.DEBUG)
 app = Flask(__name__, template_folder='./templates')
 
 @app.route('/')
