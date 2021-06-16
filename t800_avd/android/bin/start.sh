@@ -1,8 +1,9 @@
 #!/bin/bash
 
-
+rm -Rf /root/.android/avd/*.avd/*.lock
+rm -Rf /root/.android/avd/*.avd/*.cache
 adb devices | grep emulator | cut -f1 | while read device; do adb -s $device emu kill; done
-emulator -avd test -no-audio -no-boot-anim -no-window -accel on -gpu off -skin 1440x2880 &launched=false
+emulator -avd $EMULATOR -no-audio -no-boot-anim -no-window -accel on -gpu off -skin 1440x2880 &launched=false
 echo -n "Booting device: "
 while [ "$launched" == false ]; do
   check=$(adb wait-for-device shell getprop sys.boot_completed | tr -d '\r')
@@ -26,4 +27,6 @@ adb push '/frida/hluda-server-14.2.18-android-x86' '/data/local/tmp/updater'
 adb shell 'chmod +x /data/local/tmp/updater'
 adb shell '/data/local/tmp/updater -l 0.0.0.0 -D'&
 
-python3 /ws/api/api.py
+touch /flask.log
+python3 /ws/api/api.py &
+tail -f /flask.log
