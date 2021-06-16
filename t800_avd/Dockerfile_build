@@ -21,14 +21,14 @@ RUN apt-get install -y \
 
 WORKDIR /
 
-COPY ../../android/SDK/sdk-tools-linux-4333796.zip /tmp
-COPY ../../android/frida /frida
-COPY ../../webservice/requirements.txt /app/requirements.txt
+COPY ./android/SDK/sdk-tools-linux-4333796.zip /tmp
+COPY ./android/frida /frida
+COPY ./webservice/requirements.txt /app/requirements.txt
 RUN unzip -d /opt/android /tmp/sdk-tools-linux-4333796.zip
 
 RUN mkdir -p /root/.android && touch /root/.android/repositories.cfg
 RUN mkdir -p /usr/share/zoneinfo/Europe && touch /usr/share/zoneinfo/Europe/Paris
-COPY ../../android/timezone/Paris /usr/share/zoneinfo/Europe/Paris
+COPY ./android/timezone/Paris /usr/share/zoneinfo/Europe/Paris
 RUN ln -sf /usr/share/zoneinfo/Europe/Paris /etc/localtime
 
 
@@ -49,4 +49,3 @@ RUN yes Y | /opt/android/tools/bin/sdkmanager --licenses \
 		--abi $ARCH
 
 RUN python3 -m pip install -r /app/requirements.txt
-ENTRYPOINT ["/utils/start.sh"]
