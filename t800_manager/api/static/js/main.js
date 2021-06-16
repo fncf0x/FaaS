@@ -56,3 +56,95 @@ function debug_device(device){
   var device_id = device.getAttribute('device_id')
   document.location = `/${device_id}/`
 }
+
+function refresh_devices(){
+  var devices_list = document.getElementById('devices_list');
+  devices_list.innerHTML = `<br><br><center><div class="lds-dual-ring"></div></center>`
+  fetch('/devices', {
+      method: "GET"
+    }).then(response => response.text().then(function (text){
+      devices_list.innerHTML = text;
+    }
+    ))
+}
+
+function show_panel(){
+  var panel = document.getElementById('add_device_panel');
+  var container = document.getElementById('container');
+  var devices = document.getElementById('devices');
+  panel.style.opacity = "1"
+  panel.style.zIndex = "999"
+  
+  container.style.zIndex = "0"
+  devices.style.opacity = "0.2"
+}
+function hide_panel(){
+  var panel = document.getElementById('add_device_panel');
+  var container = document.getElementById('container');
+  var devices = document.getElementById('devices');
+  panel.style.opacity = "0"
+  panel.style.zIndex = "0"
+  
+  container.style.zIndex = "999"
+  devices.style.opacity = "1"
+}
+
+function stopped(device){
+  var device_id = device.getAttribute('device_id')
+  var status = document.getElementById(`${device_id}_stopped`);
+  status.innerHTML = '<center><div class="lds-dual-ring-small"></div></center>'
+  fetch('/start_device', {
+    method: "POST",
+    headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+    body: `id=${device_id}`
+  }).then(response => response.text().then(
+    function (text){
+      status.innerHTML = 'booting'
+      status.className = 'device_booting'
+    }
+  ))
+}
+
+function running(device){
+  var device_id = device.getAttribute('device_id')
+  var status = document.getElementById(`${device_id}_running`);
+  status.innerHTML = '<center><div class="lds-dual-ring-small"></div></center>'
+  fetch('/pause_device', {
+    method: "POST",
+    headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+    body: `id=${device_id}`
+  }).then(response => response.text().then(
+    function (text){
+      status.innerHTML = 'stopped'
+      status.className = 'device_stopped'
+      refresh_devices()
+    }
+  ))  
+}
+
+function remove(device){
+  var device_id = device.getAttribute('device_id')
+  fetch('/delete_device', {
+    method: "POST",
+    headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+    body: `id=${device_id}`
+  }).then(response => response.text().then(
+    function (text){
+      refresh_devices()
+    }
+  ))  
+}
+
+function add(){
+  hide_panel()
+  var image_name = document.getElementById('image_name')
+  fetch('/add_device', {
+    method: "POST",
+    headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+    body: `image_name=${image_name.value}`
+  }).then(response => response.text().then(
+    function (text){
+      refresh_devices()
+    }
+  ))  
+}
