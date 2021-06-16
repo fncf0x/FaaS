@@ -1,12 +1,30 @@
 <div id='devices'>
-    <br><br>
-{% for device in devices%}
-    <div id=device onclick="debug_device(this)" device_id={{device["id"]}}>
-        <div class=device_id>{{device["id"]}}</div>
-        <div class=device_ip>{{device["ip"]}}</div>
-        <div class=device_name>{{device["name"]}}</div>
-        <div class='device_{{device["status"]}}' >{{device["status"]}}</div>
-        <div class=device_tools></div>
+    <br>
+    <div id=devices_header>Devices:
+        <div class=devices_tool>
+            <img onclick="show_panel()" class='refresh_devices' src='/static/images/add_device.png'>
+            <img onclick="refresh_devices()" class='add_device' src='/static/images/refresh_devices.png'>
+        </div>
     </div>
-{% endfor %}
+<br>
+<div id=devices_list>
+    {{devices_list}}
+</div>
+</div>
+<div id='add_device_panel'>
+    <div style='width: 100%;height: 10%;border-bottom: solid white 1px;'>
+        <div onclick="hide_panel()" style="float: right;width: 25px; height: 100%;">
+            <img src='/static/images/close.png' height="100%">
+        </div>
+    </div>
+    <br>
+    Image:
+    <br><br>
+    <select id=image_name style="width: 80%; left: 10%;position: absolute;border: solid green 1px; background-color: black;color: white;">
+        {% for image in images %}
+            <option value="{{image['name']}}">{{image['name']}}</option>
+        {% endfor %}
+    </select>
+    <br>
+    <div class='add_button' onclick="add()">Add</div>
 </div>

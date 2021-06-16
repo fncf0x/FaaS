@@ -9,7 +9,7 @@
     <body>
         <div id="cboxOverlay" style="opacity: 0.8; cursor: default; visibility: visible;"></div>
         {% include "components/main-bar.html" %}
-        <div id=container>
+        <div id=container style='z-index: 999;'>
             {{content}}
         </div>
     </body>
