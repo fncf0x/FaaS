@@ -15,8 +15,8 @@ services:
     ports:
       - "${PORT}-5000"
     volumes:
-      - ./apk:/apk
-      - ./hooks:/hooks
+      - ../../shared/apk:/apk
+      - ../../shared/hooks:/hooks
       - /dev:/dev
       - ../../webservice:/ws
       - ../../android/bin:/utils
