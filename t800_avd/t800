@@ -29,10 +29,6 @@ else
 			TAG=1
 		fi
 		shared_dir=$EPWD./emulators/$ARCH\_$API_V\_$TAG
-		echo $shared_dir
-		mkdir $shared_dir
-		mkdir $shared_dir/apk
-		mkdir $shared_dir/hooks
 		chmod -R 773 $shared_dir
 		cp $EPWD./Dockerfile $shared_dir/Dockerfile
 		cp $EPWD./docker-compose.yml $shared_dir/docker-compose.yml
