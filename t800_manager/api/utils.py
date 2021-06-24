@@ -4,7 +4,7 @@ import subprocess as sp
 T800_BIN = '/home/jack/dataimpact/t800/t800_avd/'
 
 def get_status(device_id):
-    p = sp.run(f"docker logs --tail 13 {device_id}", shell=True, stdout=sp.PIPE, stderr=sp.PIPE)
+    p = sp.run(f"docker logs --tail 6 {device_id}", shell=True, stdout=sp.PIPE, stderr=sp.PIPE)
     raw_output = p.stdout.decode()
     if any(t in raw_output for t in ['* Running', 'HTTP']):
         return 'running'
