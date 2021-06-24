@@ -1,8 +1,9 @@
 from flask import Flask, render_template, request, make_response, Markup
 import subprocess as sp
 import logging
-from android_utils import get_b64_screen, android_shell_cmd, get_apps, get_hooks, get_info, get_device_info
-from utils import check_page_name, safe_cmd
+from android_utils import *
+from utils import check_page_name, safe_cmd, make_args
+import re
 
 
 logging.basicConfig(filename='/flask.log',level=logging.DEBUG)
@@ -36,9 +37,49 @@ def page():
     return 'Error'
 
 
-@app.route('/run_hook')
-def run_hook():
-    return 'run hook'
+@app.route('/exec_frida_function', methods=['GET', 'POST'])
+def exec_frida_function():
+    app_name = request.args.get('app_name')
+    init_script = request.args.get('init_script')
+    class_name = request.args.get('class_name')
+    func_name = request.args.get('func_name')
+    func_args = request.args.get('func_args')
+    func_args = make_args(func_args)
+    frida_func(app_name, init_script, func_name, func_args)
+    return (
+        f'name: {app_name}<br>'
+        f'init_script: {init_script}<br>'
+        f'class: {class_name}<br>'
+        f'function: {func_name}<br>'
+        f'args: {func_args}<br>')
+
+
+@app.route('/exec_frida_script', methods=['GET', 'POST'])
+def exec_frida_script():
+    app_name = request.args.get('app_name')
+    script_name = request.args.get('script_name')
+    args = request.args.get('args')
+    args = make_args(args)
+    code, msg = frida_script(app_name, script_name, args)
+    if not code:
+        return json.dumps({
+            'code': 1,
+            'msg': msg})
+    else:
+        return json.dumps({
+            'code': 0,
+            'msg': json.loads(msg)})
+
+
+@app.route('/install_apk', methods=['GET', 'POST'])
+def install():
+    apk_name = request.args.get('apk_name')
+    apks = get_apks()
+    if not apks:
+        return 'No apks uploaded yet'
+    if apk_name not in apks:
+        return 'Apk not found'
+    return install_apk(apk_name)
 
 
 @app.route('/cmd', methods=['GET', 'POST'])
