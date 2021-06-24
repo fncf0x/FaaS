@@ -1,9 +1,15 @@
+import os
 import requests
-from flask import Flask, render_template, request, Markup
+import datetime
+from pyaxmlparser import APK
+from werkzeug.utils import secure_filename
 
-from utils import refresh_devices, get_images
+from flask import Flask, render_template, request, Markup, redirect, flash, url_for, send_from_directory
 
-UPLOAD_FOLDER = "./resources/"
+
+from utils import refresh_devices, get_images, run_device, stop_device, add_new_device, remove_device, convert_size
+
+UPLOAD_FOLDER = "../../t800_avd/shared/"
 ALLOWED_EXTENSIONS = ["js", "apk"]
 MAX_FILE_SIZE = 100 * 1024 * 1024
 
@@ -57,18 +63,16 @@ def install_apk(device_id):
 
 @app.route('/<device_id>/<endpoint>', methods=['GET', 'POST'])
 def status(device_id, endpoint):
-    if request.method == 'GET':
-        _, devices_ids, devices_info = refresh_devices()
+    _, devices_ids, devices_info = refresh_devices()
     if device_id not in devices_ids:
         return "<center>No such device</center>"
     avd_port = devices_info[device_id]['ip'].split(':')[1]
-    api_response = requests.get(f'http://127.0.0.1:{avd_port}/{endpoint}').text
-    return api_response
-
-
-if request.method == 'POST':
-    data = request.form
-    api_response = requests.post(f'http://127.0.0.1:{avd_port}/{endpoint}', data=data).text
+    
+    if request.method == 'GET':
+        api_response = requests.get(f'http://127.0.0.1:{avd_port}/{endpoint}').text
+    if request.method == 'POST':
+        data = request.form
+        api_response = requests.post(f'http://127.0.0.1:{avd_port}/{endpoint}', data=data).text
     return api_response
 
 
@@ -112,17 +116,16 @@ def start_device():
     return 'OK'
 
 
-ef
-allowed_file(filename):
-return '.' in filename and \
-       filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+def allowed_file(filename):
+    return '.' in filename and \
+        filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
 
 @app.route('/scripts')
 def frida_script_list():
     columns = ["Frida Scripts", "Size", "Last Modifed"]
 
-    path = os.path.join(os.getcwd(), "resources/frida_scripts")
+    path = os.path.join(os.getcwd(), os.path.join(app.config['UPLOAD_FOLDER'], "hooks/"))
     files = os.listdir(path)
     scripts = []
     for filename in files:
@@ -144,11 +147,10 @@ def frida_script_list():
 def apk_list():
     columns = ["APK File Name", "Package", "Size", "Version"]
 
-    path = os.path.join(os.getcwd(), "resources/apks")
+    path = os.path.join(os.getcwd(), os.path.join(app.config['UPLOAD_FOLDER'], "apk/"))
     files = os.listdir(path)
     apks = []
     for filename in files:
-        print("boop", os.path.join(path, filename))
         apkf = APK(os.path.join(path, filename))
 
         package = apkf.package
@@ -188,11 +190,11 @@ def upload_file():
         extension = file.filename.split('.')[-1]
 
         if extension == "apk":
-            file.save(os.path.join(app.config['UPLOAD_FOLDER'], "apks/", filename))
+            file.save(os.path.join(app.config['UPLOAD_FOLDER'], "apk/", filename))
             return redirect(url_for('apk_list'))
 
         if extension == "js":
-            file.save(os.path.join(app.config['UPLOAD_FOLDER'], "frida_scripts/", filename))
+            file.save(os.path.join(app.config['UPLOAD_FOLDER'], "hooks/", filename))
             return redirect(url_for('frida_script_list'))
         return redirect(request.url)
 
