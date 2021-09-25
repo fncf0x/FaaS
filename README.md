@@ -30,12 +30,3 @@ python3 api.py
 ```
 
 Now you can go to the manager [http://127.0.0.1:4000/](http://127.0.0.1:4000/)
-### Contribution guidelines ###
-
-* branch -> PR -> QA -> boom
-
-### Who do I talk to? ###
-
-* Faradj
-* Théo
-* Aymen
