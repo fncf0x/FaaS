@@ -1,8 +1,8 @@
 version: "3.7"
 services:
-  t800:
+  faas:
     container_name: ${ARCH}_${API_V}_${TAG}
-    image: t800_android_${API_V}_${ARCH}
+    image: faas_android_${API_V}_${ARCH}
     build:
       context: .
       dockerfile: ./Dockerfile_build

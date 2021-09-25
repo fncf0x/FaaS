@@ -1,6 +1,6 @@
-# T800 #
+# FAAS #
 
-T800 is a tool that create and manage multiple android devices and run:
+FAAS is a tool that create and manage multiple android devices and run:
 
 * An API that can be used to interact with thoses devices via Frida or not.
 * A UI to debug and manage each device individually
@@ -9,7 +9,7 @@ T800 is a tool that create and manage multiple android devices and run:
 
 Setup docker
 ```bash
-cd t800_avd
+cd faas_avd
 ./setup.sh
 ```
 
@@ -20,7 +20,7 @@ ARCH=x86 API_V=30 BUILD_V=30.0.2 docker-compose up
 
 Run the manager
 ```bash
-cd t800_manager
+cd faas_manager
 python3 -m venv .env
 source .env/bin/activate
 pip install pip --upgrade

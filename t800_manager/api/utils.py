@@ -1,7 +1,7 @@
 import math
 import subprocess as sp
 
-T800_BIN = '/home/jack/dataimpact/t800/t800_avd/'
+FAAS_BIN = '/home/jack/dataimpact/faas/faas_avd/'
 
 
 def get_status(device_id):
@@ -15,12 +15,12 @@ def get_status(device_id):
 def get_images():
     images = []
 
-    p = sp.run("docker images | grep -Ei '^t800_'|tr -s ' ' '|'", shell=True, stdout=sp.PIPE)
+    p = sp.run("docker images | grep -Ei '^faas_'|tr -s ' ' '|'", shell=True, stdout=sp.PIPE)
     raw_output = p.stdout.decode()
     _images = raw_output.split('\n')[:-1]
     for image in _images:
         image_info = image.split('|')
-        images.append({"name": image_info[0].replace('t800_', ''), "id": image_info[2]})
+        images.append({"name": image_info[0].replace('faas_', ''), "id": image_info[2]})
     return images
 
 
@@ -69,7 +69,7 @@ def run_device(device_id):
     arch = name[0]
     api = name[1]
     tag = name[2]
-    p = sp.Popen([f"EPWD={T800_BIN} {T800_BIN}t800 run {arch} {api} {tag}"], shell=True, stdout=sp.PIPE, stderr=sp.PIPE,
+    p = sp.Popen([f"EPWD={FAAS_BIN} {FAAS_BIN}faas run {arch} {api} {tag}"], shell=True, stdout=sp.PIPE, stderr=sp.PIPE,
                  close_fds=True)
 
 
@@ -84,14 +84,14 @@ def remove_device(device_id):
     arch = name[0]
     api = name[1]
     tag = name[2]
-    sp.run(f"EPWD={T800_BIN} {T800_BIN}t800 remove {arch} {api} {tag}", shell=True, stdout=sp.PIPE, stderr=sp.PIPE)
+    sp.run(f"EPWD={FAAS_BIN} {FAAS_BIN}faas remove {arch} {api} {tag}", shell=True, stdout=sp.PIPE, stderr=sp.PIPE)
 
 
 def add_new_device(image):
     info = image.strip().split('_')
     arch = info[2]
     api = info[1]
-    sp.run(f"EPWD={T800_BIN} {T800_BIN}t800 add {arch} {api} ", shell=True, stdout=sp.PIPE, stderr=sp.PIPE)
+    sp.run(f"EPWD={FAAS_BIN} {FAAS_BIN}faas add {arch} {api} ", shell=True, stdout=sp.PIPE, stderr=sp.PIPE)
 
 
 def convert_size(size_bytes):

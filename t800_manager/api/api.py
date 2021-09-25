@@ -9,7 +9,7 @@ from flask import Flask, render_template, request, Markup, redirect, flash, url_
 
 from utils import refresh_devices, get_images, run_device, stop_device, add_new_device, remove_device, convert_size
 
-UPLOAD_FOLDER = "../../t800_avd/shared/"
+UPLOAD_FOLDER = "../../faas_avd/shared/"
 ALLOWED_EXTENSIONS = ["js", "apk"]
 MAX_FILE_SIZE = 100 * 1024 * 1024
 
