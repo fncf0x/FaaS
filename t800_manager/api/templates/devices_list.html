@@ -1,0 +1,21 @@
+{% if devices %}
+{% for device in devices%}
+    <div id=device>
+        <div class=device_id>{{device["id"]}}</div>
+        <div class=device_ip>{{device["ip"]}}</div>
+        <div class=device_name>{{device["name"]}}</div>
+        <div class='device_{{device["status"]}}' id='{{device["id"]}}_{{device["status"]}}' >{{device["status"]}}</div>
+        <div class=device_tools>
+            <div class='delete_device' onclick="remove(this)" device_id={{device["id"]}}><img src='/static/images/delete_device.png' height="100%"></div>
+            {% if device['status']!='booting' %}
+            <div class='pause_device' onclick="{{device['status']}}(this)" device_id={{device["id"]}}><img src='/static/images/{{device["status"]}}_device.png' height="100%"></div>
+            {% endif %}
+            {% if device['status']=='running' %}
+            <div class='debug_device' onclick="debug_device(this)" device_id={{device["id"]}}><img src='/static/images/debug_device.png' height="100%"></div>
+            {% endif %}
+        </div>
+    </div>
+{% endfor %}
+{% else %}
+<center><font color=white>No devices yet</font></center>
+{% endif %}

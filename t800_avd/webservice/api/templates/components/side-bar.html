@@ -1,0 +1,10 @@
+<div id=side-bar>
+<br><br><br><br>
+<button class='refreshButton' onclick="fetch_screen()">
+    <img src='/static/images/refresh.png' style='z-index:999' height="100%">
+</button>
+<div class=tab onclick="fetch_page(this)" name='apps'><div class=canvas><img src='/static/images/apk.png' height="80%"></div><div class=tabName>Packages</div></div>
+<div class=tab onclick="fetch_page(this)" name='hooks'><div class=canvas><img src='/static/images/frida.png' height="80%"></div><div class=tabName>Frida hooks</div></div>
+<div class=tab onclick="fetch_page(this)" name='shell'><div class=canvas><img src='/static/images/terminal.png' height="80%"></div><div class=tabName>Shell</div></div>
+<div class=tab onclick="fetch_page(this)" name='info'><div class=canvas><img src='/static/images/info.png' height="80%"></div><div class=tabName>Informations</div></div>
+</div>

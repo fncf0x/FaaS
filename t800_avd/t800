@@ -1,0 +1,58 @@
+#!/bin/bash
+
+ARGC=$#
+
+if [ $ARGC -lt 1 ]; then
+	echo "Usage: $0 CMD [ARGS]"
+	exit 1
+else
+	ARCH=$2
+	API_V=$3
+	TAG=$4
+	if [ $1 == "build" ]; then
+		if [ $ARGC -ne 3 ]; then
+			echo "Usage: $0 build <arch> <api_version>"
+			exit 1
+		fi
+		ARCH=$ARCH API_V=$API_V docker-compose -f docker-compose_build.yml build
+		exit 0
+	fi
+	if [ $1 == "add" ]; then
+		if [ $ARGC -lt 3 ]; then
+			echo "Usage: $0 add <arch> <api_version>"
+			exit 1
+		fi
+		LAST_TAG=$(ls $EPWD./emulators/ | head | rev | cut -d'_' -f 1 | rev | tail -1)
+		if [ ! -z $LAST_TAG ]; then
+			TAG=$[LAST_TAG + 1]
+		else
+			TAG=1
+		fi
+		shared_dir=$EPWD./emulators/$ARCH\_$API_V\_$TAG
+		chmod -R 773 $shared_dir
+		cp $EPWD./Dockerfile $shared_dir/Dockerfile
+		cp $EPWD./docker-compose.yml $shared_dir/docker-compose.yml
+		ARCH=$ARCH API_V=$API_V TAG=$TAG PORT=5000 docker-compose -f $shared_dir/docker-compose.yml up --no-start
+		exit 0
+	fi
+	if [ $1 == "run" ]; then
+		if [ $ARGC -lt 4 ]; then
+			echo "Usage: $0 add <arch> <api_version> <tag>"
+			exit 1
+		fi
+		shared_dir=$EPWD./emulators/$ARCH\_$API_V\_$TAG
+		ARCH=$ARCH API_V=$API_V TAG=$TAG PORT=5000 docker-compose -f $shared_dir/docker-compose.yml up
+		exit 0
+	fi
+	if [ $1 == "remove" ]; then
+		if [ $ARGC -lt 4 ]; then
+			echo "Usage: $0 remove <arch> <api_version> <tag>"
+			exit 1
+		fi
+		shared_dir=$EPWD./emulators/$ARCH\_$API_V\_$TAG
+		rm -Rf $shared_dir
+		docker stop $ARCH\_$API_V\_$TAG
+		docker rm $ARCH\_$API_V\_$TAG
+		exit 0
+	fi
+fi

@@ -1,0 +1,52 @@
+FROM ubuntu:18.04
+
+ARG ANDROID_API_LEVEL
+ARG DEBIAN_FRONTEND
+ARG ARCH
+
+ENV ANDROID_HOME=/opt/android
+ENV PATH "$PATH:$ANDROID_HOME/emulator:$ANDROID_HOME/tools/bin:$ANDROID_HOME/platform-tools"
+ENV LD_LIBRARY_PATH "$ANDROID_HOME/emulator/lib64:$ANDROID_HOME/emulator/lib64/qt/lib"
+
+SHELL ["/bin/bash", "-c"]
+
+
+RUN apt-get update
+RUN apt-get install -y \
+		openjdk-8-jdk vim git unzip \
+		libglu1 libpulse-dev libasound2 libc6  \
+		libstdc++6 libx11-6 libx11-xcb1 libxcb1 \
+		libxcomposite1 libxcursor1 libxi6 \
+		libxtst6 libnss3 wget python3 python3-pip imagemagick
+
+WORKDIR /
+
+COPY ../../android/SDK/sdk-tools-linux-4333796.zip /tmp
+COPY ../../android/frida /frida
+COPY ../../webservice/requirements.txt /app/requirements.txt
+RUN unzip -d /opt/android /tmp/sdk-tools-linux-4333796.zip
+
+RUN mkdir -p /root/.android && touch /root/.android/repositories.cfg
+RUN mkdir -p /usr/share/zoneinfo/Europe && touch /usr/share/zoneinfo/Europe/Paris
+COPY ../../android/timezone/Paris /usr/share/zoneinfo/Europe/Paris
+RUN ln -sf /usr/share/zoneinfo/Europe/Paris /etc/localtime
+
+
+RUN yes Y | /opt/android/tools/bin/sdkmanager --install \
+		"platform-tools" \
+		"system-images;android-$ANDROID_API_LEVEL;google_apis;$ARCH" \
+		"platforms;android-$ANDROID_API_LEVEL" \
+		"emulator"
+
+RUN yes Y | /opt/android/tools/bin/sdkmanager --licenses \
+		&& echo "no" | /opt/android/tools/bin/avdmanager \
+		--verbose create avd \
+		--force \
+		--name $ARCH-$ANDROID_API_LEVEL \
+		--device "pixel" \
+		--package "system-images;android-$ANDROID_API_LEVEL;google_apis;$ARCH" \
+		--tag "google_apis" \
+		--abi $ARCH
+
+RUN python3 -m pip install -r /app/requirements.txt
+ENTRYPOINT ["/utils/start.sh"]

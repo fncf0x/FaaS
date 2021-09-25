@@ -1,0 +1,13 @@
+version: "3.7"
+services:
+  t800:
+    container_name: ${ARCH}_${API_V}_${TAG}
+    image: t800_android_${API_V}_${ARCH}
+    build:
+      context: .
+      dockerfile: ./Dockerfile_build
+      args:
+        ANDROID_API_LEVEL: ${API_V}
+        ARCH: ${ARCH}
+    device_cgroup_rules:
+      - 'c *:* rmw'

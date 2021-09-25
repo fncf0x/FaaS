@@ -1,0 +1,9 @@
+<div class=appsTitle><font color=green>#</font> Packages</div>
+<div id=apps>
+    {% for app in apps%}
+    <div class=app>
+        <div class="appIcon"><img src='/static/images/app.png' height="80%"></div>
+        <div class="appName">{{app}}</div>
+    </div>
+    {% endfor %}
+</div>

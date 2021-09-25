@@ -1,0 +1,30 @@
+<div id='devices'>
+    <br>
+    <div id=devices_header>Devices:
+        <div class=devices_tool>
+            <img onclick="show_panel()" class='refresh_devices' src='/static/images/add_device.png'>
+            <img onclick="refresh_devices()" class='add_device' src='/static/images/refresh_devices.png'>
+        </div>
+    </div>
+<br>
+<div id=devices_list>
+    {{devices_list}}
+</div>
+</div>
+<div id='add_device_panel'>
+    <div style='width: 100%;height: 10%;border-bottom: solid white 1px;'>
+        <div onclick="hide_panel()" style="float: right;width: 25px; height: 100%;">
+            <img src='/static/images/close.png' height="100%">
+        </div>
+    </div>
+    <br>
+    Image:
+    <br><br>
+    <select id=image_name style="width: 80%; left: 10%;position: absolute;border: solid green 1px; background-color: black;color: white;">
+        {% for image in images %}
+            <option value="{{image['name']}}">{{image['name']}}</option>
+        {% endfor %}
+    </select>
+    <br>
+    <div class='add_button' onclick="add()">Add</div>
+</div>

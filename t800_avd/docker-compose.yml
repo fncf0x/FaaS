@@ -1,0 +1,24 @@
+version: "3.7"
+services:
+  t800:
+    container_name: ${ARCH}_${API_V}_${TAG}
+    image: t800_android_${API_V}_${ARCH}
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+      args:
+        ANDROID_API_LEVEL: ${API_V}
+        ARCH: ${ARCH}
+        TAG: ${TAG}
+    device_cgroup_rules:
+      - 'c *:* rmw'
+    ports:
+      - "${PORT}-5000"
+    volumes:
+      - ../../shared/apk:/apk
+      - ../../shared/hooks:/hooks
+      - /dev:/dev
+      - ../../webservice:/ws
+      - ../../android/bin:/utils
+    environment:
+      - EMULATOR=${ARCH}-${API_V}
